@@ -63,7 +63,7 @@ export default function Header(props) {
                 <Button className={classes.button} variant="contained" size="small">
                     Auto Complete
                 </Button>
-                <Button className={classes.button} variant="contained" size="small">
+                <Button className={classes.button} variant="contained" size="small" onClick={props.resetGame}>
                     Reset Game
                 </Button>
             </div>
