@@ -18,7 +18,8 @@ class Sudoku extends Component {
             selectedGrid: { row_index: -1, col_index: -1 }, // This objecct store the current selected grid position. Update this when a new grid is selected.
             gameBoardBorderStyle: "8px solid #000", // This stores the gameBoarderStyle and is passed to the gameboard div. Update this to have a error effect (Bonus #2).
             completeFlag: false, // Set this flag to true when you wnat to set off the firework effect.
-            conflicts: [] // The array stores all the conflicts positions triggered at this moment. Update the array whenever you needed.
+            conflicts: [], // The array stores all the conflicts positions triggered at this moment. Update the array whenever you needed.
+            currentTimeout: -1,
         }
     }
 
@@ -29,7 +30,6 @@ class Sudoku extends Component {
                     row_index: row_index,
                     col_index: col_index,
                 },
-                conflicts: [],
             });
         }
     }
@@ -64,12 +64,20 @@ class Sudoku extends Component {
             conflicts: conflictArr
         }));
         if (conflictArr.length > 0) {
-            this.setState({ gameBoardBorderStyle: "8px solid #E77" });
-            setTimeout(() => {
+            if (this.state.currentTimeout !== -1) {
+                clearTimeout(this.state.currentTimeout);
+            }
+            let timeoutId = setTimeout(() => {
                 this.setState({
+                    conflicts: [],
                     gameBoardBorderStyle: "8px solid #000",
+                    currentTimeout: -1,
                 });
             }, 1000);
+            this.setState({ 
+                gameBoardBorderStyle: "8px solid #E77",
+                currentTimeout: timeoutId,
+            });
             return;
         }
         this.setState((state) => {
